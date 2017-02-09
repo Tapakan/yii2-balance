@@ -6,6 +6,14 @@ class_name: UnitTester
 modules:
     enabled:
         - Asserts
+        - Db
         - Yii2:
-            part: fixtures
+            part: [fixtures, orm]
         - \Helper\Unit
+    config:
+      Db:
+         dsn:      'mysql:host=localhost;dbname=balance'
+         user:     'root'
+         password: ''
+         populate: false #clean database before each test starts
+         cleanup:  true #clean database after each test ends

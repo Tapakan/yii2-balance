@@ -9,10 +9,12 @@
 
 namespace Tapakan\Balance\Tests\unit;
 
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
  * Class Account
+ * @property integer $id
  * @property integer $user_id
  * @property integer $value
  */
@@ -23,7 +25,24 @@ class Account extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'BalanceAccount';
+        return 'e_users_balance';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class'              => TimestampBehavior::className(),
+                'createdAtAttribute' => 'updated_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value'              => function () {
+                    return date('Y-m-d H:i:s');
+                },
+            ],
+        ];
     }
 
     /**
@@ -32,7 +51,8 @@ class Account extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'value'], 'safe']
+            ['user_id', 'required'],
+            ['value', 'default', 'value' => 0]
         ];
     }
 }
