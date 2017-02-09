@@ -1,0 +1,48 @@
+{
+  "name"        : "tapakan/yii2-balance",
+  "description" : "Yii2 balance service",
+  "version"     : "0.0.1",
+  "keywords"    : [
+    "yii2",
+    "balance"
+  ],
+  "homepage"    : "https://github.com/Tapakan/yii2-balance.git",
+  "license"     : "MIT",
+  "authors"     : [
+    {
+      "name" : "Alexander Oganov",
+      "email": "t_tapak@yahoo.com",
+      "role" : "Developer"
+    }
+  ],
+  "require"     : {
+    "php"         : ">=5.6",
+    "yiisoft/yii2": "~2.0"
+  },
+  "require-dev" : {
+    "codeception/codeception"  : "^2.2",
+    "codeception/verify"       : "~0.3.1",
+    "codeception/specify"      : "~0.4.5",
+    "squizlabs/php_codesniffer": "~2.8.0",
+    "satooshi/php-coveralls"   : "~1.0",
+    "phpunit/php-code-coverage": "~4.0"
+  },
+  "autoload"    : {
+    "psr-4": {
+      "Tapakan\\Balance\\"        : "src",
+      "Tapakan\\Balance\\Events\\": "src/Events",
+      "Tapakan\\Balance\\Tests\\" : "tests"
+    }
+  },
+  "extra"       : {
+    "branch-alias": {
+      "dev-master": "0.x-dev"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url" : "https://asset-packagist.org"
+    }
+  ]
+}
