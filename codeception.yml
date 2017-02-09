@@ -1,13 +1,13 @@
 actor: Tester
 paths:
-    tests: tests
-    log: tests/_output
-    data: tests/_data
-    support: tests/_support
-    envs: tests/_envs
+    tests:    tests
+    log:      tests/_output
+    data:     tests/_data
+    support:  tests/_support
+    envs:     tests/_envs
 settings:
-    bootstrap: _bootstrap.php
-    colors: false
+    bootstrap:    _bootstrap.php
+    colors:       false
     memory_limit: 1024M
 extensions:
     enabled:
@@ -16,8 +16,9 @@ modules:
     config:
         Yii2:
             configFile: 'tests/config/test.php'
-        Db:
-            dsn: ''
-            user: ''
-            password: ''
-            dump: tests/_data/dump.sql
+
+coverage:
+    enabled: true
+    include:
+        - src/*
+        - src/Events/*
