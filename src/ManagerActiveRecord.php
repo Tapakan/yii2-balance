@@ -9,6 +9,7 @@
 
 namespace Tapakan\Balance;
 
+use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 
 /**
@@ -36,6 +37,28 @@ class ManagerActiveRecord extends ManagerDbTransaction
         $model = $class::find()->where($condition)->one();
 
         return $model ? $model->getPrimaryKey(false) : false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function calculateBalance($account)
+    {
+        /** @var ActiveRecord $class */
+        $accountId = $this->fetchAccountId($account);
+        $class     = $this->transactionClass;
+
+        return $class::find()
+            ->andWhere([$this->accountAttribute => $accountId])
+            ->sum($this->amountAttribute);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function revert($transactionId, $data = [])
+    {
+        throw new NotSupportedException('"revert" is not implemented.');
     }
 
     /**
@@ -91,28 +114,6 @@ class ManagerActiveRecord extends ManagerDbTransaction
         $primaryKey  = array_shift($primaryKeys);
 
         $class::updateAllCounters([$this->amountAttribute => $value], [$primaryKey => $accountId]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function calculateBalance($account)
-    {
-        /** @var ActiveRecord $class */
-        $accountId = $this->fetchAccountId($account);
-        $class     = $this->transactionClass;
-
-        return $class::find()
-            ->andWhere([$this->accountAttribute => $accountId])
-            ->sum($this->amountAttribute);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function revert($transactionId, $data = [])
-    {
-        // TODO: Implement revert() method.
     }
 
     /**
