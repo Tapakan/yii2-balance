@@ -41,7 +41,12 @@ abstract class AbstractManager extends Component implements ManagerInterface
      * @var string name of the transaction entity attribute, which should be used to link transaction entity with
      * account entity (store associated account ID).
      */
-    public $accountAttribute = 'account_id';
+    public $accountLinkAttribute = 'account_id';
+
+    /**
+     * @var string name of the account user identifier attribute, used for comfort and fast find account id.
+     */
+    public $accountUserIdAttribute = 'user_id';
 
     /**
      * @event TransactionEvent an event raised before creating new transaction. You may adjust
@@ -62,8 +67,8 @@ abstract class AbstractManager extends Component implements ManagerInterface
     {
         $accountId = $this->fetchAccountId($account);
 
-        $data[$this->amountAttribute]  = $value;
-        $data[$this->accountAttribute] = $accountId;
+        $data[$this->amountAttribute]      = $value;
+        $data[$this->accountLinkAttribute] = $accountId;
 
         $data = $this->beforeCreateTransaction($accountId, $data);
 
@@ -86,18 +91,27 @@ abstract class AbstractManager extends Component implements ManagerInterface
     /**
      * Find or create account.
      *
-     * @param integer|array $account Account id or condition
+     * @param integer|array $idOrCondition Account id or condition
      *
-     * @return integer Returns account id
+     * @return int Returns account id
+     * @throws \UnexpectedValueException
      */
-    protected function fetchAccountId($account)
+    protected function fetchAccountId($idOrCondition)
     {
-        if (!is_array($account)) {
-            return $account;
+        if (!is_array($idOrCondition)) {
+            if (!$accountId = $this->findAccountId($idOrCondition)) {
+                if (!$accountId = $this->findAccountIdByUserIdentifier($idOrCondition)) {
+                    return $idOrCondition;
+                }
+            }
+
+            return $accountId;
         }
 
-        if ($accountId = !$this->findAccountId($account)) {
-            $accountId = $this->createAccount($account);
+        if (!$accountId = $this->findAccountId($idOrCondition)) {
+            if (!$accountId = $this->createAccount($idOrCondition)) {
+                throw new \UnexpectedValueException("Can not instantiate account");
+            }
         }
 
         return $accountId;
@@ -106,11 +120,20 @@ abstract class AbstractManager extends Component implements ManagerInterface
     /**
      * Find exist account
      *
-     * @param integer|array $condition Primary key or condition
+     * @param integer|array $idOrCondition Primary key or condition
      *
      * @return mixed
      */
-    abstract protected function findAccountId($condition);
+    abstract protected function findAccountId($idOrCondition);
+
+    /**
+     * Find exist account by user identifier
+     *
+     * @param integer $userId
+     *
+     * @return mixed
+     */
+    abstract protected function findAccountIdByUserIdentifier($userId);
 
     /**
      * Find exist transaction

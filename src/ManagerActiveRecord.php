@@ -30,18 +30,6 @@ class ManagerActiveRecord extends ManagerDbTransaction
     /**
      * @inheritdoc
      */
-    public function findAccountId($condition)
-    {
-        /** @var ActiveRecord $class */
-        $class = $this->accountClass;
-        $model = $class::find()->where($condition)->one();
-
-        return $model ? $model->getPrimaryKey(false) : false;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function calculateBalance($account)
     {
         /** @var ActiveRecord $class */
@@ -49,7 +37,7 @@ class ManagerActiveRecord extends ManagerDbTransaction
         $class     = $this->transactionClass;
 
         return $class::find()
-            ->andWhere([$this->accountAttribute => $accountId])
+            ->andWhere([$this->accountLinkAttribute => $accountId])
             ->sum($this->amountAttribute);
     }
 
@@ -64,12 +52,49 @@ class ManagerActiveRecord extends ManagerDbTransaction
     /**
      * @inheritdoc
      */
+    protected function findAccountId($idOrCondition)
+    {
+        /** @var ActiveRecord $class */
+        $class = $this->accountClass;
+        $model = $class::findOne($idOrCondition);
+
+        if (!is_object($model)) {
+            return null;
+        }
+
+        return $model->getPrimaryKey(false);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function findAccountIdByUserIdentifier($userId)
+    {
+        /** @var ActiveRecord $class */
+        $class = $this->accountClass;
+        $model = $class::findOne([$this->accountUserIdAttribute => $userId]);
+
+        if (!is_object($model)) {
+            return null;
+        }
+
+        return $model->getPrimaryKey(false);
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function findTransaction($condition)
     {
         /** @var ActiveRecord $class */
         $class = $this->transactionClass;
+        $model = $class::findOne($condition);
 
-        return $class::findOne($condition);
+        if (!is_object($model)) {
+            return null;
+        }
+
+        return $model->getPrimaryKey(false);
     }
 
     /**
@@ -81,8 +106,8 @@ class ManagerActiveRecord extends ManagerDbTransaction
         $class = $this->accountClass;
 
         $class = new $class();
-        $class->setAttributes($data);
-        $class->save(false);
+        $class->setAttributes($data, false);
+        $class->save(true);
 
         return $class->getPrimaryKey(false);
     }
@@ -96,8 +121,8 @@ class ManagerActiveRecord extends ManagerDbTransaction
         $class = $this->transactionClass;
 
         $class = new $class();
-        $class->setAttributes($data);
-        $class->save(false);
+        $class->setAttributes($data, false);
+        $class->save(true);
 
         return $class->getPrimaryKey(false);
     }
