@@ -110,7 +110,7 @@ abstract class AbstractManager extends Component implements ManagerInterface
      *
      * @return mixed
      */
-    abstract public function findAccountId($condition);
+    abstract protected function findAccountId($condition);
 
     /**
      * Find exist transaction
