@@ -10,8 +10,16 @@
 use yii\helpers\ArrayHelper;
 
 $params = [
-    'id'       => 'testapp',
-    'basePath' => __DIR__,
+    'id'         => 'testapp',
+    'basePath'   => __DIR__,
+    'components' => [
+        'db' => [
+            'class'    => 'yii\db\Connection',
+            'dsn'      => 'mysql:host=localhost;dbname=travis_db',
+            'username' => 'travis',
+            'password' => 'mysql_native_password',
+        ]
+    ]
 ];
 
 if (is_file(__DIR__ . '/test-local.php')) {
