@@ -28,7 +28,7 @@ before_script:
   - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost' WITH GRANT OPTION;";
 
 script:
-  - php vendor/bin/codecept run unit -c codeception.yml --coverage-xml
+  - php vendor/bin/codecept run unit -c codeception.yml --debug --coverage-xml
 
 after_success:
   - travis_retry php vendor/bin/coveralls

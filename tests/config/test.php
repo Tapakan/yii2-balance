@@ -15,7 +15,7 @@ $params = [
     'components' => [
         'db' => [
             'class'    => 'yii\db\Connection',
-            'dsn'      => 'mysql:host=localhost;dbname=travis_db',
+            'dsn'      => 'mysql:host=127.0.0.1;dbname=travis_db',
             'username' => 'travis',
             'password' => '',
         ]

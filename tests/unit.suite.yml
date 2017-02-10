@@ -12,7 +12,7 @@ modules:
         - \Helper\Unit
     config:
       Db:
-         dsn:      'mysql:host=localhost;dbname=travis_db'
+         dsn:      'mysql:host=127.0.0.1;dbname=travis_db'
          user:     'travis'
          password: ''
          populate: false #clean database before each test starts
