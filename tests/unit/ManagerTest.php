@@ -123,12 +123,12 @@ class ManagerTest extends TestCase
     public function testCreateAccount()
     {
         $manager = $this->createManager();
-        $account = $this->getAccount($this->userId);
 
         $manager->increase(['user_id' => $this->userId], 777, [
             'order_id' => $this->faker->randomDigitNotNull,
             'site_id'  => $this->faker->randomDigitNotNull,
         ]);
+        $account = $this->getAccount($this->userId);
         verify($account)->isInstanceOf(Account::className());
     }
 
