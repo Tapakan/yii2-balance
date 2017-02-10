@@ -17,7 +17,7 @@ $params = [
             'class'    => 'yii\db\Connection',
             'dsn'      => 'mysql:host=localhost;dbname=travis_db',
             'username' => 'travis',
-            'password' => 'mysql_native_password',
+            'password' => '',
         ]
     ]
 ];

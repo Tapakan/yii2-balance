@@ -12,8 +12,8 @@ modules:
         - \Helper\Unit
     config:
       Db:
-         dsn:      'mysql:host=localhost;dbname=balance'
-         user:     'root'
+         dsn:      'mysql:host=localhost;dbname=travis_db'
+         user:     'travis'
          password: ''
          populate: false #clean database before each test starts
          cleanup:  true #clean database after each test ends
