@@ -1,10 +1,12 @@
 {
   "name"        : "tapakan/yii2-balance",
-  "description" : "Yii2 balance service",
+  "description" : "Supports user balance and transactions, calculating actual balance from history",
   "version"     : "0.0.1",
   "keywords"    : [
     "yii2",
-    "balance"
+    "balance",
+    "extension",
+    "transaction"
   ],
   "homepage"    : "https://github.com/Tapakan/yii2-balance.git",
   "license"     : "MIT",
