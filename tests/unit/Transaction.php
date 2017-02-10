@@ -25,7 +25,7 @@ class Transaction extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'e_users_balance_history';
+        return 'balance_history';
     }
 
     /**

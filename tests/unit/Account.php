@@ -25,7 +25,7 @@ class Account extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'e_users_balance';
+        return 'balance';
     }
 
     /**
