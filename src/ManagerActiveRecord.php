@@ -94,7 +94,7 @@ class ManagerActiveRecord extends ManagerDbTransaction
             return null;
         }
 
-        return $model->getPrimaryKey(false);
+        return $model->getAttributes();
     }
 
     /**
