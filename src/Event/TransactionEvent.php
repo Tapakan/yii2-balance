@@ -7,7 +7,7 @@
  * @coder       Alexander Oganov <t_tapak@yahoo.com>
  */
 
-namespace Tapakan\Balance\Events;
+namespace Tapakan\Balance\Event;
 
 use yii\base\Event;
 

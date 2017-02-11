@@ -9,7 +9,8 @@
 
 namespace Tapakan\Balance;
 
-use Tapakan\Balance\Events\TransactionEvent;
+use Tapakan\Balance\Event\TransactionEvent;
+use Tapakan\Balance\Exception\CouldNotCreateTransactionException;
 use yii\base\Component;
 use yii\base\InvalidParamException;
 
@@ -50,6 +51,11 @@ abstract class AbstractManager extends Component implements ManagerInterface
     public $accountUserIdAttribute = 'user_id';
 
     /**
+     * @var bool Run validation when save ActiveRecord
+     */
+    public $runValidation = true;
+
+    /**
      * @event TransactionEvent an event raised before creating new transaction. You may adjust
      * [[TransactionEvent::transactionData]] changing actual data to be saved.
      */
@@ -75,6 +81,10 @@ abstract class AbstractManager extends Component implements ManagerInterface
 
         $this->incrementAccountBalance($accountId, $value);
         $transactionId = $this->createTransaction($data);
+
+        if (!$transactionId) {
+            throw new CouldNotCreateTransactionException("Couldn't create transaction");
+        }
 
         $this->afterCreateTransaction($transactionId, $accountId, $data);
 
@@ -116,13 +126,13 @@ abstract class AbstractManager extends Component implements ManagerInterface
     protected function fetchAccountId($idOrCondition)
     {
         if (!is_array($idOrCondition)) {
-            if (!$accountId = $this->findAccountId($idOrCondition)) {
-                if (!$accountId = $this->findAccountIdByUserIdentifier($idOrCondition)) {
-                    return $idOrCondition;
-                }
+            if (isset($this->accountUserIdAttribute) &&
+                ($accountId = $this->findAccountIdByUserIdentifier($idOrCondition))
+            ) {
+                $idOrCondition = $accountId;
             }
 
-            return $accountId;
+            return $idOrCondition;
         }
 
         if (!$accountId = $this->findAccountId($idOrCondition)) {
@@ -148,7 +158,7 @@ abstract class AbstractManager extends Component implements ManagerInterface
      *
      * @param integer $userId
      *
-     * @return mixed
+     * @return int|mixed
      */
     abstract protected function findAccountIdByUserIdentifier($userId);
 

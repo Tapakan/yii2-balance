@@ -21,4 +21,4 @@ coverage:
     enabled: true
     include:
         - src/*
-        - src/Events/*
+        - src/Event/*

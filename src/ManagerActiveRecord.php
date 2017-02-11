@@ -98,7 +98,7 @@ class ManagerActiveRecord extends ManagerDbTransaction
 
         $class = new $class();
         $class->setAttributes($data, false);
-        $class->save(true);
+        $class->save($this->runValidation);
 
         return $class->getPrimaryKey(false);
     }
@@ -113,7 +113,7 @@ class ManagerActiveRecord extends ManagerDbTransaction
 
         $class = new $class();
         $class->setAttributes($data, false);
-        $class->save(true);
+        $class->save($this->runValidation);
 
         return $class->getPrimaryKey(false);
     }
