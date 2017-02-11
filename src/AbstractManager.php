@@ -1,7 +1,7 @@
 <?php
 /**
  * AbstractManager
- * @version     0.0.1
+ * @version     0.1.1
  * @license     http://mit-license.org/
  * @author      Tapakan https://github.com/Tapakan
  * @coder       Alexander Oganov <t_tapak@yahoo.com>
@@ -11,6 +11,7 @@ namespace Tapakan\Balance;
 
 use Tapakan\Balance\Events\TransactionEvent;
 use yii\base\Component;
+use yii\base\InvalidParamException;
 
 /**
  * Class AbstractManager
@@ -89,12 +90,28 @@ abstract class AbstractManager extends Component implements ManagerInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function revert($transactionId, $data = [])
+    {
+        $transaction = $this->findTransaction($transactionId);
+        if (!$transaction) {
+            throw new InvalidParamException("Transaction '{$transactionId}' doesn't exists");
+        }
+
+        $value   = $transaction[$this->amountAttribute];
+        $account = $transaction[$this->accountLinkAttribute];
+
+        return $this->increase($account, (-1 * $value), $data);
+    }
+
+    /**
      * Find or create account.
      *
      * @param integer|array $idOrCondition Account id or condition
      *
      * @return int Returns account id
-     * @throws \UnexpectedValueException
+     * @throws InvalidParamException
      */
     protected function fetchAccountId($idOrCondition)
     {
@@ -110,7 +127,7 @@ abstract class AbstractManager extends Component implements ManagerInterface
 
         if (!$accountId = $this->findAccountId($idOrCondition)) {
             if (!$accountId = $this->createAccount($idOrCondition)) {
-                throw new \UnexpectedValueException("Can not instantiate account");
+                throw new InvalidParamException("Can not instantiate account");
             }
         }
 

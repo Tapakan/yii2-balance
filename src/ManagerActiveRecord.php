@@ -1,7 +1,7 @@
 <?php
 /**
  * ActiveRecordManager
- * @version     0.0.1
+ * @version     0.1.1
  * @license     http://mit-license.org/
  * @author      Tapakan https://github.com/Tapakan
  * @coder       Alexander Oganov <t_tapak@yahoo.com>
@@ -9,7 +9,6 @@
 
 namespace Tapakan\Balance;
 
-use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 
 /**
@@ -39,14 +38,6 @@ class ManagerActiveRecord extends ManagerDbTransaction
         return $class::find()
             ->andWhere([$this->accountLinkAttribute => $accountId])
             ->sum($this->amountAttribute);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function revert($transactionId, $data = [])
-    {
-        throw new NotSupportedException('"revert" is not implemented.');
     }
 
     /**
@@ -94,7 +85,7 @@ class ManagerActiveRecord extends ManagerDbTransaction
             return null;
         }
 
-        return $model->getPrimaryKey(false);
+        return $model->getAttributes();
     }
 
     /**

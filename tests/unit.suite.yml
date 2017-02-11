@@ -16,5 +16,5 @@ modules:
          user:     'travis'
          password: ''
          dump:     'tests/_data/dump.sql'
-         populate: false #clean database before each test starts
+         populate: true #clean database before each test starts
          cleanup:  true #clean database after each test ends

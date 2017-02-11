@@ -1,7 +1,7 @@
 <?php
 /**
  * Transaction
- * @version     0.0.1
+ * @version     0.1.1
  * @license     http://mit-license.org/
  * @author      Tapakan https://github.com/Tapakan
  * @coder       Alexander Oganov <t_tapak@yahoo.com>
@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
 
 /**
  * Class Transaction
+ * @property integer $id
  * @property integer $account_id
  * @property integer $value
  * @property string  $data

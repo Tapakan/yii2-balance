@@ -1,7 +1,7 @@
 <?php
 /**
  * TestCase
- * @version     0.0.1
+ * @version     0.1.1
  * @license     http://mit-license.org/
  * @author      Tapakan https://github.com/Tapakan
  * @coder       Alexander Oganov <t_tapak@yahoo.com>
@@ -18,6 +18,11 @@ use yii\helpers\ArrayHelper;
  */
 abstract class TestCase extends \Codeception\Test\Unit
 {
+    /**
+     * @var \UnitTester
+     */
+    protected $tester;
+
     /**
      * @var \Faker\Generator
      */
