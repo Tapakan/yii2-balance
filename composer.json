@@ -27,7 +27,7 @@
     "codeception/specify"      : "~0.4.5",
     "squizlabs/php_codesniffer": "~2.8.0",
     "satooshi/php-coveralls"   : "~1.0",
-    "phpunit/php-code-coverage": "~5.0",
+    "phpunit/php-code-coverage": "~4.0",
     "fzaninotto/faker"         : "^1.6"
   },
   "autoload"    : {
