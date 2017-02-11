@@ -56,6 +56,12 @@ Yii:$app->balance->increase($accountId_OR_userId_OR_condition, 750, [
 ]);
 ```
 
+#####Since 0.1.1  version you can revert a transaction.
+Let's allow transaction #35 it is removal of 200 points from the account of the user. The following command will return them into the account.
+```php
+Yii:$app->balance->revert($transactionId)
+```
+
 #### Example of table structure
 ```php
         // History of operations
