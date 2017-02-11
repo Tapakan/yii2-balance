@@ -9,7 +9,6 @@
 
 namespace Tapakan\Balance;
 
-use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 
 /**
@@ -39,14 +38,6 @@ class ManagerActiveRecord extends ManagerDbTransaction
         return $class::find()
             ->andWhere([$this->accountLinkAttribute => $accountId])
             ->sum($this->amountAttribute);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function revert($transactionId, $data = [])
-    {
-        throw new NotSupportedException('"revert" is not implemented.');
     }
 
     /**
