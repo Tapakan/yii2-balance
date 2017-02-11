@@ -13,7 +13,7 @@ modules:
     config:
       Db:
          dsn:      'mysql:host=127.0.0.1;dbname=travis_db'
-         user:     'root'
+         user:     'travis'
          password: ''
          dump:     'tests/_data/dump.sql'
          populate: true #clean database before each test starts
