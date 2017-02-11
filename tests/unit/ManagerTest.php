@@ -36,7 +36,7 @@ class ManagerTest extends TestCase
     {
         parent::setUp();
 
-        $this->userId = $this->faker->randomDigit;
+        $this->userId = $this->faker->randomDigitNotNull;
     }
 
     /**
