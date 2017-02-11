@@ -10,8 +10,10 @@
 namespace Tapakan\Balance\Tests\unit;
 
 use Codeception\Specify;
+use Tapakan\Balance\AbstractManager;
 use Tapakan\Balance\ManagerActiveRecord;
-use yii\base\NotSupportedException;
+use yii\base\Exception;
+use yii\base\InvalidParamException;
 use yii\db\ActiveRecord;
 
 /**
@@ -20,11 +22,6 @@ use yii\db\ActiveRecord;
 class ManagerTest extends TestCase
 {
     use Specify;
-
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
 
     /**
      * Generating user id for new account
@@ -50,6 +47,18 @@ class ManagerTest extends TestCase
         return Transaction::find()
             ->orderBy(['id' => SORT_DESC])
             ->limit(1)
+            ->one();
+    }
+
+    /**
+     * @param integer $id Transaction id
+     *
+     * @return Transaction|ActiveRecord
+     */
+    protected function getTransaction($id)
+    {
+        return Transaction::find()
+            ->andWhere(['id' => $id])
             ->one();
     }
 
@@ -133,6 +142,26 @@ class ManagerTest extends TestCase
     }
 
     /**
+     * Test create account by user identifier
+     */
+    public function testFindAccountByUserIdentifier()
+    {
+        $manager = $this->createManager();
+
+        // First we create
+        $manager->increase(['user_id' => $this->userId], 777, [
+            'order_id' => $this->faker->randomDigitNotNull,
+            'site_id'  => $this->faker->randomDigitNotNull,
+        ]);
+        $manager->increase($this->userId, 777, [
+            'order_id' => $this->faker->randomDigitNotNull,
+            'site_id'  => $this->faker->randomDigitNotNull,
+        ]);
+        $account = $this->getAccount($this->userId);
+        verify($account)->isInstanceOf(Account::className());
+    }
+
+    /**
      * Test calculating Transactions and compare with value from Account
      */
     public function testCalculateBalance()
@@ -157,12 +186,89 @@ class ManagerTest extends TestCase
     }
 
     /**
-     * Method not implemented yet
-     * @expectedException NotSupportedException
+     * Test revert user balance
      */
-    public function testRevert()
+    public function testRevertTransaction()
     {
-        $this->expectException(NotSupportedException::class);
-        $this->createManager()->revert(777);
+        $transactionId = mt_rand(1, 10);
+        $manager       = $this->createManager();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $value   = mt_rand(1, 100);
+            $data    = [
+                'order_id' => $this->faker->randomDigitNotNull,
+                'site_id'  => $this->faker->randomDigitNotNull,
+            ];
+            $account = [
+                'user_id' => $this->userId
+            ];
+            $manager->increase($account, $value, $data);
+        }
+
+        $beforeRevert  = $this->getTransaction($transactionId);
+        $transactionId = $manager->revert($transactionId);
+        $afterRevert   = $this->getTransaction($transactionId);
+
+        verify(abs($afterRevert->value))->equals(abs($beforeRevert->value));
+        verify(abs($afterRevert->id))->notEquals(abs($beforeRevert->id));
+    }
+
+    /**
+     * Testing revert transactions
+     */
+    public function testManualRevertTransaction()
+    {
+        $manager   = $this->createManager();
+        $accountId = 1;
+
+        $manager->increase($accountId, 150); // transId #1 - 150
+        $manager->increase($accountId, 730); // transId #1 - 730
+        $manager->increase($accountId, 500); // transId #3 - 500
+        $manager->decrease($accountId, 199); // transId #4 - 199
+
+        $balance = $manager->calculateBalance($accountId); // 1181
+        verify($balance)->equals(1181);
+
+        $manager->revert(1);
+
+        $balanceStepTwo = $manager->calculateBalance($accountId); // 1031
+        verify($balanceStepTwo)->equals(1031);
+
+        $manager->revert(4);
+
+        $balanceStepThree = $manager->calculateBalance($accountId); // 1230
+        verify($balanceStepThree)->equals(1230);
+    }
+
+    /**
+     * Test roll back transaction. Will throw an exception.
+     */
+    public function testRollBackTransaction()
+    {
+        $manager      = $this->createManager();
+        $transactions = $this->tester->grabNumRecords(Transaction::tableName());
+        codecept_debug($this->tester->grabNumRecords(Transaction::tableName()));
+
+        $manager->on(AbstractManager::EVENT_BEFORE_CREATE_TRANSACTION, function ($e) {
+            throw new Exception("Die transaction");
+        });
+
+        try {
+            $manager->increase($this->userId, 80000);
+        } catch (\Exception $exception) {
+            codecept_debug("I'm here hater");
+        }
+
+        verify($transactions)->equals($this->tester->grabNumRecords(Transaction::tableName()));
+    }
+
+    /**
+     * Test revert not existing transaction
+     */
+    public function testRevertNotExistingTransaction()
+    {
+        $this->expectException(InvalidParamException::class);
+        $manager = $this->createManager();
+        $manager->revert($this->faker->randomDigitNotNull);
     }
 }

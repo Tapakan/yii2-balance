@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
 
 /**
  * Class Transaction
+ * @property integer $id
  * @property integer $account_id
  * @property integer $value
  * @property string  $data

@@ -19,6 +19,11 @@ use yii\helpers\ArrayHelper;
 abstract class TestCase extends \Codeception\Test\Unit
 {
     /**
+     * @var \UnitTester
+     */
+    protected $tester;
+
+    /**
      * @var \Faker\Generator
      */
     protected $faker;
