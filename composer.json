@@ -1,7 +1,7 @@
 {
   "name"        : "tapakan/yii2-balance",
   "description" : "Supports user balance and transactions, calculating actual balance from history",
-  "version"     : "0.1.1",
+  "version"     : "0.2.0",
   "keywords"    : [
     "yii2",
     "balance",
