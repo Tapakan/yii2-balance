@@ -51,7 +51,7 @@ class Account extends ActiveRecord
     public function rules()
     {
         return [
-            ['user_id', 'required'],
+            ['user_id', 'default', 'value' => null],
             ['value', 'default', 'value' => 0]
         ];
     }

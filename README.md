@@ -23,8 +23,8 @@ to the require section of your composer.json
     'components' => [
         'balance' => [
             'class'                  => 'Tapakan\Balance\ManagerActiveRecord',
-            'accountClass'           => 'common\models\UserBalanace',
-            'transactionClass'       => 'common\models\UserBalanaceHistory',
+            'accountClass'           => 'common\models\UserBalance',
+            'transactionClass'       => 'common\models\UserBalanceHistory',
             'accountLinkAttribute'   => 'account_id',
             'amountAttribute'        => 'value',
             'balanceAttribute'       => 'value',

@@ -32,9 +32,10 @@
   },
   "autoload"    : {
     "psr-4": {
-      "Tapakan\\Balance\\"        : "src",
-      "Tapakan\\Balance\\Events\\": "src/Events",
-      "Tapakan\\Balance\\Tests\\" : "tests"
+      "Tapakan\\Balance\\"           : "src",
+      "Tapakan\\Balance\\Exception\\": "src/Exception",
+      "Tapakan\\Balance\\Event\\"    : "src/Event",
+      "Tapakan\\Balance\\Tests\\"    : "tests"
     }
   },
   "extra"       : {
