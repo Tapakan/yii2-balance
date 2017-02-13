@@ -1,7 +1,7 @@
 <?php
 /**
  * Yii2 codeception config
- * @version     0.1.1
+ * @version     0.2.0
  * @license     http://mit-license.org/
  * @author      Tapakan https://github.com/Tapakan
  * @coder       Alexander Oganov <t_tapak@yahoo.com>
