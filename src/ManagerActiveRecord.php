@@ -139,6 +139,17 @@ class ManagerActiveRecord extends ManagerDbTransaction
      */
     protected function createDbTransaction()
     {
-        return \Yii::$app->db->getTransaction();
+        $class = $this->transactionClass;
+        $db    = $class::getDb();
+
+        if ($db->hasMethod('getTransaction') && $db->getTransaction() !== null) {
+            return null;
+        }
+
+        if ($db->hasMethod('beginTransaction')) {
+            return $db->beginTransaction();
+        }
+
+        return null;
     }
 }
